@@ -1,12 +1,22 @@
 import serial as sr
 import matplotlib.pyplot as plt
 import csv as csv
+import time as ts
 
 filename = "test.csv"
 
+# Samples
+samples = 10
+print_labels = False
+line = 0
+sensor_data = []
+print(sensor_data)
+
 # Variables for plotting
-# plt.ion()
-#fig = plt.figure()
+plt.ion()
+
+# Pop up with graph
+# fig = plt.figure()
 i = 0
 x = list()
 y = list()
@@ -15,20 +25,25 @@ y = list()
 arduinoData = sr.Serial('COM3', 115200)
 arduinoData.close()
 arduinoData.open()
+
 # Continous plotting
-while True:
-    data = arduinoData.readline()
-    print(data.decode())
-    x.append(i)
-    y.append(data.decode)
+
+   # Readings
+while line <= samples:
+    read_data = arduinoData.readline()
+    data_string = read_data.decode('utf-8')
+    data = data_string[0:][:-2]
+    readings = data.split(",")
+
+    sensor_data.append(readings)
+    print(sensor_data)
+    line = line+1
 
     # Log variables
-    fields = ['X', 'Y', 'Z']
-    rows = [data.decode()]
-    with open(filename, 'w', newline='') as csvfile:
-        csvwriter = csv.writer(csvfile, dialect='excel')
-        csvwriter.writerow(fields)
-        csvwriter.writerow(rows)
+    with open(filename, 'w', encoding='UTF8', newline='') as f:
+        csvwriter = csv.writer(f)
+        csvwriter.writerows(sensor_data)
+    f.close()    
 
     #plt.scatter(i, float(data.decode()))
     #i += 1
