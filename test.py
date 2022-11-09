@@ -27,8 +27,7 @@ arduinoData.close()
 arduinoData.open()
 
 # Continous plotting
-
-   # Readings
+# Readings
 while line <= samples:
     read_data = arduinoData.readline()
     data_string = read_data.decode('utf-8')
@@ -36,7 +35,8 @@ while line <= samples:
     readings = data.split(",")
 
     sensor_data.append(readings)
-    print(sensor_data)
+    #print(sensor_data)
+    #print(sensor_data[0][0]) #Possibility for individual values
     line = line+1
 
     # Log variables
@@ -53,4 +53,4 @@ while line <= samples:
 
 # TODO show live plotting for ten seconds and then reset
 # TODO calculate offset
-# TODO log all data into a csv file
+# TODO log all data into a csv file --> DONE
