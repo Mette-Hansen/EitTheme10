@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+# Tyvstjålet herfra https://thepoorengineer.com/en/arduino-python-plot/#multiple
+
 from threading import Thread
 import serial
 import time
@@ -32,7 +34,7 @@ class serialPlot:
         self.thread = None
         self.plotTimer = 0
         self.previousTimer = 0
-        # self.csvData = []
+
 
         print('Trying to connect to: ' + str(serialPort) + ' at ' + str(serialBaud) + ' BAUD.')
         try:
@@ -61,7 +63,7 @@ class serialPlot:
             self.data[i].append(value)    # we get the latest data point and append it to our array
             lines[i].set_data(range(self.plotMaxLength), self.data[i])
             lineValueText[i].set_text('[' + lineLabel[i] + '] = ' + str(value))
-        # self.csvData.append([self.data[0][-1], self.data[1][-1], self.data[2][-1]])
+
 
     def backgroundThread(self):    # retrieve data
         time.sleep(1.0)  # give some buffer time for retrieving data
@@ -69,15 +71,14 @@ class serialPlot:
         while (self.isRun):
             self.serialConnection.readinto(self.rawData)
             self.isReceiving = True
-            #print(self.rawData)
+
 
     def close(self):
         self.isRun = False
         self.thread.join()
         self.serialConnection.close()
         print('Disconnected...')
-        # df = pd.DataFrame(self.csvData)
-        # df.to_csv('/home/rikisenia/Desktop/data.csv')
+
 
 
 def main():
